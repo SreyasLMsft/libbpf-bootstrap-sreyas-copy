@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <errno.h>
 
+int cnt;
+
 int init_shared_memory(const char *name, size_t size, struct shm_ringbuf **shm_ptr) {
     int created = 0;
     int shm_fd = shm_open(name, O_RDWR, 0666);
@@ -39,6 +41,7 @@ int init_shared_memory(const char *name, size_t size, struct shm_ringbuf **shm_p
         return -1;
     }
 
+    cnt=0;
     if (created) {
         // Initialize the shared memory structure
         (*shm_ptr)->head = 0;
@@ -78,8 +81,9 @@ int shm_ringbuf_write(struct shm_ringbuf *buf, const struct event *e) {
     // Memory barrier to ensure data is visible before updating head
     __sync_synchronize();
 
-    printf("Real head = %zu\nafter mod = %zu\n", head+len, (head+len)%SHM_DATA_SIZE);
     buf->head = (head + len)% SHM_DATA_SIZE;
+    cnt++;
+    printf("count= %u\n", cnt);
     printf("Lalala Wrote event to shared memory: head=%zu, tail=%zu\n", buf->head, buf->tail);
     return 0;
 }
