@@ -47,7 +47,7 @@ int init_shared_memory(const char *name, size_t size, struct shm_ringbuf **shm_p
         printf("Created and initialized shared memory: %s\n", name);
     } else {
         // If not created, read the existing head and tail
-        printf("Opened existing shared memory: %s, head=%zu, tail=%zu\n", name, (*shm_ptr)->head, (*shm_ptr)->tail);
+        printf("Lalala Opened existing shared memory: %s, head=%zu, tail=%zu\n", name, (*shm_ptr)->head, (*shm_ptr)->tail);
     }
 
     return shm_fd;
@@ -58,7 +58,7 @@ int shm_ringbuf_write(struct shm_ringbuf *buf, const struct event *e) {
     size_t len = sizeof(struct event);
     size_t head = buf->head;
     size_t tail = buf->tail;
-    size_t free_space = (tail + SHM_DATA_SIZE - head - 1);
+    size_t free_space = head>tail ? (tail + SHM_DATA_SIZE - head - 1) : (tail - head - 1);
 
     if (len > free_space) {
         fprintf(stderr, "Not enough space in shared memory to write event\n");
@@ -78,6 +78,8 @@ int shm_ringbuf_write(struct shm_ringbuf *buf, const struct event *e) {
     // Memory barrier to ensure data is visible before updating head
     __sync_synchronize();
 
-    buf->head = (head + len);
-    printf("Wrote event to shared memory: head=%zu, tail=%zu\n", buf->head, buf->tail);
+    printf("Real head = %zu\nafter mod = %zu\n", head+len, (head+len)%SHM_DATA_SIZE);
+    buf->head = (head + len)% SHM_DATA_SIZE;
+    printf("Lalala Wrote event to shared memory: head=%zu, tail=%zu\n", buf->head, buf->tail);
     return 0;
+}

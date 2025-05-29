@@ -6,8 +6,8 @@
 #include "smbdiag.h"
 
 #define SHM_NAME "/bpf_shm"
-#define SHM_SIZE ((MAX_ENTRIES + 1) * 4096) // should always be a multiple of the page size
-#define SHM_DATA_SIZE (SHM_SIZE - sizeof(size_t) * 2) // size of data minus head and tail
+#define SHM_SIZE ((MAX_ENTRIES + 1) * PAGE_SIZE) // should always be a multiple of the page size
+#define SHM_DATA_SIZE ((SHM_SIZE - sizeof(size_t) * 2)/10) //delete /10 later // size of data minus head and tail
 
 struct shm_ringbuf {
     size_t head;

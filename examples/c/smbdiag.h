@@ -6,10 +6,11 @@
 #define TASK_COMM_LEN	 16
 #define MAX_SMB_COMMANDS	20
 #define MAX_ENTRIES 2048
+#define PAGE_SIZE 4096
 
 #define SMBSLOWER 0
 
-#include <sys/types.h>
+//#include <sys/types.h>
 
 union metrics {
 	unsigned long long latency_ns;
@@ -25,7 +26,7 @@ struct partial_event {
 };
 
 struct event {
-	pid_t pid;
+	int pid;
 	unsigned long long cmd_end_time_ns;
 	unsigned long long session_id;
 	unsigned long long mid;
