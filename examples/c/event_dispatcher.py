@@ -106,7 +106,7 @@ def read_ringbuf():
                 print(f"[AOD] Count {cnt}")
                 print(f"[AOD] Event(pid={event['pid']}, cmd_end_time_ns={event['cmd_end_time_ns']}, "
                       f"session_id={event['session_id']}, mid={event['mid']}, smbcommand={event['smbcommand']}, "
-                      f"metric.latency_ns={event['metric_latency_ns']}, tool={event['tool']}, "
+                      f"metric.latency_ns={int(event['metric_latency_ns'])}, tool={event['tool']}, "
                       f"is_compounded={event['is_compounded']}, task={event['task'].decode(errors='ignore').strip()})")
 
             # Update tail in shared memory
