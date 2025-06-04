@@ -109,7 +109,7 @@ static int parse_cmd_list(const char *arg, int max_cmds) {
 		if (cmd >= 0 && cmd < MAX_SMB_COMMANDS) {
 			cmd_filter[cmd] = 1;
 			count++;
-			token = strtok(NULL, ",");
+			//token = strtok(NULL, ",");
 		}
 		token = strtok(NULL, ",");
 	}
