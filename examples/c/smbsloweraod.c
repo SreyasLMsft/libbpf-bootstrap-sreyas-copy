@@ -143,7 +143,7 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
 			return 1;
 		}
 		include_mode = true;
-		printf("Include mode enabled, parsing commands: %s\n", arg);
+		//printf("Include mode enabled, parsing commands: %s\n", arg);
 		int err = parse_cmd_list(arg, MAX_SMB_COMMANDS);
 		if (err < 0) {
 			warn("Failed to parse include commands: %s\n", arg);
@@ -152,7 +152,7 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
 			warn("No valid commands specified in include list: %s\n", arg);
 			argp_usage(state);
 		}
-		printf("%d", err);
+		//printf("%d", err);
 		break;
 	case 'x':
 		if (include_mode) {
@@ -161,7 +161,7 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
 			return 1;
 		}
 		exclude_mode = true;
-		printf("Exclude mode enabled, parsing commands: %s\n", arg);
+		//printf("Exclude mode enabled, parsing commands: %s\n", arg);
 		err = parse_cmd_list(arg, MAX_SMB_COMMANDS);
 		if (err < 0) {
 			warn("Failed to parse exclude commands: %s\n", arg);
@@ -210,12 +210,12 @@ static int handle_event(void *ctx, void *data, size_t data_sz)
 {
 	const struct event *e = data;
 	if (data_sz < sizeof(e)) {
-		printf("Error: packet too small\n");
+		fprintf(stderr, "Error: packet too small\n");
 		return 0;
 	}
 
-	printf("%d %s %d %lld %lld %llx %d\n", e->pid, e->task, e->smbcommand, e->mid, e->cmd_end_time_ns, e->session_id, e->is_compounded);	
-	printf("writing to shared memory");
+	//printf("%d %s %d %lld %lld %llx %d\n", e->pid, e->task, e->smbcommand, e->mid, e->cmd_end_time_ns, e->session_id, e->is_compounded);	
+	//printf("writing to shared memory");
 	if (shm_ringbuf_write(shm_ptr, e)< 0 ) {
 		fprintf(stderr, "Failed to write event to shared memory\n");
 		return -1; // Not enough space
@@ -247,7 +247,7 @@ int update_denylist_map(struct smbsloweraod_bpf *skel) {
 		else if (include_mode && !cmd_filter[cmd]) deny = true;
 
 		if (deny) {
-			printf("Denying command %d (%s)\n", cmd, get_smb_command(cmd));
+			//printf("Denying command %d (%s)\n", cmd, get_smb_command(cmd));
 			if (bpf_map_update_elem(bpf_map__fd(skel->maps.denylist), &cmd, &deny, BPF_ANY) < 0) {
 				warn("Failed to update denylist map for command %d\n", cmd);
 				return -1;
@@ -320,7 +320,7 @@ int main(int argc, char **argv)
 	while (!exiting) {
 		err = ring_buffer__poll(rb, 5); /* wait only for 5ms to collect other events */
 		if (err < 0 && err != -EINTR) {
-			printf("error polling the ring buffer: %d\n", err);
+			fprintf(stderr, "error polling the ring buffer: %d\n", err);
 			goto cleanup_shm;
 		}
 		if (duration) {

@@ -47,17 +47,16 @@ int init_shared_memory(const char *name, size_t size, struct shm_ringbuf **shm_p
         (*shm_ptr)->head = 0;
         (*shm_ptr)->tail = 0;
         memset((*shm_ptr)->data, 0, SHM_DATA_SIZE);
-        printf("Created and initialized shared memory: %s\n", name);
+        //printf("Created and initialized shared memory: %s\n", name);
     } else {
         // If not created, read the existing head and tail
-        printf("Lalala Opened existing shared memory: %s, head=%zu, tail=%zu\n", name, (*shm_ptr)->head, (*shm_ptr)->tail);
+        //printf("[smbslower] Opened existing shared memory: %s, head=%zu, tail=%zu\n", name, (*shm_ptr)->head, (*shm_ptr)->tail);
     }
 
     return shm_fd;
 }
 
 int shm_ringbuf_write(struct shm_ringbuf *buf, const struct event *e) {
-    printf("In shm_ringbuf_write\n");
     size_t len = sizeof(struct event);
     size_t head = buf->head;
     size_t tail = buf->tail;
@@ -83,7 +82,7 @@ int shm_ringbuf_write(struct shm_ringbuf *buf, const struct event *e) {
 
     buf->head = (head + len)% SHM_DATA_SIZE;
     cnt++;
-    printf("count= %u\n", cnt);
-    printf("Lalala Wrote event to shared memory: head=%zu, tail=%zu\n", buf->head, buf->tail);
+    //printf("count= %u\n", cnt);
+    //printf("[smbslower] Wrote event to shared memory: head=%zu, tail=%zu\n", buf->head, buf->tail);
     return 0;
 }
