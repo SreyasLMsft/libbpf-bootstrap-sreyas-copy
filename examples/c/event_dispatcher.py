@@ -24,7 +24,7 @@ SMBDIAG_HEADER = os.path.join(os.path.dirname(__file__), "smbdiag.h")
 MAX_ENTRIES = get_define_value(SMBDIAG_HEADER, "MAX_ENTRIES")
 PAGE_SIZE = get_define_value(SMBDIAG_HEADER, "PAGE_SIZE")
 SHM_SIZE = ((MAX_ENTRIES + 1) * PAGE_SIZE)
-SHM_DATA_SIZE = (SHM_SIZE - 2 * HEAD_TAIL_BYTES) // 10  # delete /10 later
+SHM_DATA_SIZE = (SHM_SIZE - 2 * HEAD_TAIL_BYTES)
 class Metrics(ctypes.Union):
     _fields_ = [
         ("latency_ns", ctypes.c_ulonglong),
