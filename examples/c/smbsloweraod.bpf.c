@@ -20,7 +20,7 @@ struct {
 } denylist SEC(".maps");
 struct {
 	__uint(type, BPF_MAP_TYPE_HASH);
-	__uint(max_entries, MAX_ENTRIES * 4096);
+	__uint(max_entries, MAX_ENTRIES * 4);
 	__type(key, struct mid_q_entry *);
 	__type(value, struct partial_event);
 } temp SEC(".maps");
